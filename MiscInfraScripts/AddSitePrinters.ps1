@@ -53,7 +53,7 @@ $actions = New-ScheduledTaskAction -Execute powershell.exe -Argument '-WindowSty
 $Trigger = New-ScheduledTaskTrigger -AtLogon
 $Principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\USERS"
 $Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries 
-$Task = New-ScheduledTask -Action $Actions -Trigger $Trigger -Principal $Principal -Settings $Settings -Description "Logon task to check if all Seattle printer connections have been added to the user profile."
+$Task = New-ScheduledTask -Action $Actions -Trigger $Trigger -Principal $Principal -Settings $Settings -Description "Logon task to check if all {Office Location} printer connections have been added to the user profile."
 Register-ScheduledTask "Add Printers - {Office Location}" -InputObject $Task
 Start-ScheduledTask -TaskName "Add Printers - {Office Location}"
 }
