@@ -119,8 +119,8 @@ If ($ModeInput -eq '1')
 {
 Get-Automation-Creds -ExchangeOnline
 Test-OnlineConnection -ExchangeOnline 
-Write-Log -LogType UserAction -Output -LogContent "Connected to Exchange Online, adding $($NewDisplayName) to the _AllStaff Distibution group..." -TimeStamp
-Add-DistributionGroupMember -Identity "_All Staff" -Member $($NewUPN)
+Write-Log -LogType UserAction -Output -LogContent "Connected to Exchange Online, adding $($NewDisplayName) to the AllStaff Distibution group..." -TimeStamp
+Add-DistributionGroupMember -Identity "All Staff" -Member $($NewUPN)
 }
 
 Write-Log -LogType UserAction -Output -LogContent "DONE!" -TimeStamp
