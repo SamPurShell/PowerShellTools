@@ -1,9 +1,10 @@
+#This script reads each computer name in the the Azure Storage Queue (which is posted as the last step of the client script) and deletes computer objects with that name from AD/AAD/Intune. It then assigns the AutoPilot AAD device for the computer (which is just the serial number) to the appropriate deployment profile based on the computer name that was captured.
+
 #Start logging and set variables
 $script:timeStamp = Get-Date -Format 'hh:mm:ss-MM-dd-yyyy'
 Start-Transcript 'C:\Logs\AutoPilotTool - Server.log' -append -Force
 Write-Output "$($timeStamp) Run Started!"
-Set-CG-Variables
-Connect-CGGraphInstance -Mode PowerShellGraph | Out-Null
+
 #Initialize headers for Teams channel POST and Azure Storage Queue GET
 $Header = @{
 "API-Key" = "xxxxxxxxxxxxxx" #Storage Queue GET API key
@@ -91,12 +92,12 @@ foreach ($message in $response.QueueMessagesList.QueueMessage)
         stop-transcript
         exit
         }
-        If ($Computer.startswith("D") -eq $True) #whatever identifier you have in the computer name for desktop computers
+        If ($Computer.startswith("D-") -eq $True) #whatever identifier you have in the computer name for desktop computers
         {
         $DeviceType = '1'
         }
 
-        If ($Computer.startswith("L") -eq $True) #whatever identifier you have in the computer name for laptop computers
+        If ($Computer.startswith("L-") -eq $True) #whatever identifier you have in the computer name for laptop computers
         {
         $DeviceType = '2'
         }
