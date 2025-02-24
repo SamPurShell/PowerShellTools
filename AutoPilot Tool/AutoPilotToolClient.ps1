@@ -84,9 +84,9 @@ rasdial $VpnCheckAllUsers.Name /disconnect | Out-Null
 $CantalkToDC = Test-Connection -ComputerName DC01.example.local -Quiet -Count 2
 If ($CantalkToDC -eq $True)
 {
-$CorneaGenAdapter = @()
-$DisableNICRetryCount = 0
-Do {
+    $CorneaGenAdapter = @()
+    $DisableNICRetryCount = 0
+    Do {
     $i = 25
     Write-Progress -activity 'Running' -status "Getting networking interface details..." -percentComplete (($i / 100)  * 100);
     Start-Sleep -Seconds 5
@@ -108,22 +108,22 @@ Do {
     $DisableNICRetryCount++
     }
 
-}
-Until(($CantalkToDC -eq $False) -or ($DisableNICRetryCount -eq '15'))
+    }
+    Until(($CantalkToDC -eq $False) -or ($DisableNICRetryCount -eq '15'))
 
-If ($DisableNICRetryCount -eq '15')
-{
+    If ($DisableNICRetryCount -eq '15')
+    {
 
-$i = 25
-Write-Progress -activity 'Error.' -status "Failed to disconnect from on-premises connection, retry count exceeded. Alerting IT." -percentComplete (($i / 100)  * 100);
-Start-Sleep -s 1
+    $i = 25
+    Write-Progress -activity 'Error.' -status "Failed to disconnect from on-premises connection, retry count exceeded. Alerting IT." -percentComplete (($i / 100)  * 100);
+    Start-Sleep -s 1
 
-$TeamsNotificationJson = "{'MessageText':'$($Computername) could not lose line-of-sight to DC and exceeded retry count'}"
-$TeamsNotificationURI = "https://api.azure-api.net/api/URLPathtoTeamsAPIGateway"
-$TeamsNotificationResponse = Invoke-RestMethod -Uri $TeamsNotificationURI -Headers $TeamsHeader -Body $TeamsNotificationJson -Method Post
-write-host "system could not lose line-of-sight to DC and exceeded retry count, IT has been notified."
-Exit
-}
+    $TeamsNotificationJson = "{'MessageText':'$($Computername) could not lose line-of-sight to DC and exceeded retry count'}"
+    $TeamsNotificationURI = "https://api.azure-api.net/api/URLPathtoTeamsAPIGateway"
+    $TeamsNotificationResponse = Invoke-RestMethod -Uri $TeamsNotificationURI -Headers $TeamsHeader -Body $TeamsNotificationJson -Method Post
+    write-host "system could not lose line-of-sight to DC and exceeded retry count, IT has been notified."
+    Exit
+    }
 }
 
 $i = 35
@@ -137,68 +137,68 @@ Start-Sleep -s 10
 #Check if computer was removed from domain
 If ((gwmi win32_computersystem).partofdomain -eq $true) 
 {
-$i = 35
-Write-Progress -activity 'Error.' -status "Computer failed to remove from domain, checking network connection in order to alert IT." -percentComplete (($i / 100)  * 100);
-Start-Sleep -s 1
+    $i = 35
+    Write-Progress -activity 'Error.' -status "Computer failed to remove from domain, checking network connection in order to alert IT." -percentComplete (($i / 100)  * 100);
+    Start-Sleep -s 1
 
-#Re-enable NIC if needed to re-establish internet connection if computer wasn't removed from domain
-$EnableNICRetryCount = 0 
-Do{
-    Enable-NetAdapter -Name $AdapterToDisable.Name
-    start-sleep -Seconds 10
-    $InternetTest = Test-Connection google.com -Quiet -Count 2
+    #Re-enable NIC if needed to re-establish internet connection if computer wasn't removed from domain
+    $EnableNICRetryCount = 0 
+    Do{
+        Enable-NetAdapter -Name $AdapterToDisable.Name
+        start-sleep -Seconds 10
+        $InternetTest = Test-Connection google.com -Quiet -Count 2
 
-    If ($False -eq $InternetTest)
-    {
-    $EnableNICRetryCount++
-    }
-}
+        If ($False -eq $InternetTest)
+        {
+        $EnableNICRetryCount++
+        }
+    }    
 Until (($InternetTest -eq $True) -or ($EnableNICRetryCount -eq '15'))
 
 #Show user message if NIC won't re-enable to notify IT (since Teams posting won't work)
 If ($EnableNICRetryCount -eq '15')
-{
-$i = 20
-Write-Progress -activity 'Error.' -status "Failed to re-establish internet connection, please contact IT and alert them of this error." -percentComplete (($i / 100)  * 100);
-Start-Sleep -s 1
-Write-host "Failed to re-establish internet connection, please contact IT and alert them of this error."
-Exit
-}
-#error handling in case undomain join fails with error
-$TeamsNotificationJson = "{'MessageText':'Could not remove $($Computername) from the local domain. Error was: $($ErrorMessage)'}"
-$TeamsNotificationURI = "https://api.azure-api.net/api/URLPathtoTeamsAPIGateway"
-$TeamsNotificationResponse = Invoke-RestMethod -Uri $TeamsNotificationURI -Headers $TeamsHeader -Body $TeamsNotificationJson -Method Post
-Write-host "Computer failed to remove from domain. IT has been notified."
-Exit
+    {
+    $i = 20
+    Write-Progress -activity 'Error.' -status "Failed to re-establish internet connection, please contact IT and alert them of this error." -percentComplete (($i / 100)  * 100);
+    Start-Sleep -s 1
+    Write-host "Failed to re-establish internet connection, please contact IT and alert them of this error."
+    Exit
+    }
+    #error handling in case undomain join fails with error
+    $TeamsNotificationJson = "{'MessageText':'Could not remove $($Computername) from the local domain. Error was: $($ErrorMessage)'}"
+    $TeamsNotificationURI = "https://api.azure-api.net/api/URLPathtoTeamsAPIGateway"
+    $TeamsNotificationResponse = Invoke-RestMethod -Uri $TeamsNotificationURI -Headers $TeamsHeader -Body $TeamsNotificationJson -Method Post
+    Write-host "Computer failed to remove from domain. IT has been notified."
+    Exit
 }
 
 If ($Null -ne $AdapterToDisable)
 {
 $EnableNICRetryCount = 0 
-Do{
-    #Turn them all back on
-    $i = 40
-    Write-Progress -activity 'Running' -status "Turning network connection back on..." -percentComplete (($i / 100)  * 100);
-    Start-Sleep -s 5
-    Enable-NetAdapter -Name $AdapterToDisable.Name
-    $CantalkToDC = Test-Connection -ComputerName DC01.example.local -Quiet -Count 2
+    Do{
+        #Turn them all back on
+        $i = 40
+        Write-Progress -activity 'Running' -status "Turning network connection back on..." -percentComplete (($i / 100)  * 100);
+        Start-Sleep -s 5
+        Enable-NetAdapter -Name $AdapterToDisable.Name
+        $CantalkToDC = Test-Connection -ComputerName DC01.example.local -Quiet -Count 2
 
-    If ($CantalkToDC -eq $False)
-    {
-    $EnableNICRetryCount++
+        If ($CantalkToDC -eq $False)
+        {
+        $EnableNICRetryCount++
+        }
     }
-}
-Until (($CantalkToDC -eq $True) -or ($EnableNICRetryCount -eq '15'))
+    Until (($CantalkToDC -eq $True) -or ($EnableNICRetryCount -eq '15'))
 
-If ($EnableNICRetryCount -eq '15')
-{
-Write-host "Failed to re-establish network connection. Please contact the Help Desk and notify them of this error." -ForegroundColor Red
-Exit
+    If ($EnableNICRetryCount -eq '15')
+    {
+    Write-host "Failed to re-establish network connection. Please contact the Help Desk and notify them of this error." -ForegroundColor Red
+    Exit
 
-$i = 60
-Write-Progress -activity 'Running' -status "Removing temporary files..." -percentComplete (($i / 100)  * 100);
-Start-Sleep -s 1
-}
+    $i = 60
+    Write-Progress -activity 'Running' -status "Removing temporary files..." -percentComplete (($i / 100)  * 100);
+    Start-Sleep -s 1
+    }
 }
 
 #there is a separate Intune deployment that adds a shortcut to this tool, so we want that removed. Also deleted the version file for SMAC so that it re-runs to reset local admin password the user is using for this program.
