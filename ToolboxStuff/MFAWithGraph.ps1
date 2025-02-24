@@ -3,7 +3,7 @@
 Function Check-MFA
 {
 
-Get-UserAccount -MGGraph
+Get-UserAccount -MGGraph #This is a separate function to capture a users account object in the specified format, such as MGUser.
 
 Write-Host "Checking MFA Status of $($MgUser.UserPrincipalName)" -ForegroundColor Yellow
 
