@@ -1,3 +1,5 @@
+#This tool turns a computer into a workgroup by removing from domain locally and then syspreps to prepare for AutoPilot OOBE. Once this script completes, the server-side script should be run before the computer is turned back on to avoid any name and object conflicts.
+
 $PopupTitle = "CorneaGen Cloud Provisioning Tool"
 $PopupMessage = "Welcome to the Cloud Provisioning tool! Please Press the OK button to run the tool, or the Cancel button to cancel. Your computer will shut down automatically when the program has finished running."
 $PopupOptions = "OkCancel"
