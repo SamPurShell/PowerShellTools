@@ -1,4 +1,4 @@
-#This script was written to automate video compression and storage for nightly videos recorded on lab microscopes, which was required for compliance purposes. It is recommended to use DFSR at each site to avoid high file transfer times. 
+#This script was written to automate video compression and storage for nightly videos recorded on lab microscopes, which was required  at all labs for compliance purposes. It is recommended to use DFSR at each site to avoid high file transfer times. 
 #Labs use recorders that host their own FTP server as well as regular Windows computers on the network, so this script has options for both modes
 
 #You will need to create a config file in CSV format that includes the following in each row for each job that runs:
