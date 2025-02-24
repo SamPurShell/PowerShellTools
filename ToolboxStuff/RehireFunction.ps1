@@ -7,7 +7,7 @@ Function Rehire-User
 Write-Log -LogType UserAction -LogContent "`n$($env:username) Initiated rehire user subsystem" -TimeStamp 
 Write-Log -LogType UserAction -Output -LogContent "***<><>  Reactivate a Rehired User  <><>***`n"
 
-Set-CG-Variables #This is a function that sets some basic variables in our environment
+Set-CG-Variables #This is a function that sets some basic variables in our environment, like domain name and DC.
 $DisabledUsersPath = '\\FileSharePathToCSV\csv-output'
 $RehireName = Read-Host "Please input the users full name"
 $RehireNameFiltered = '*' + $RehireName + '.csv'
