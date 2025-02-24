@@ -38,7 +38,7 @@ param (
     [switch]
     $MoarComplexity
 )
-$Dice = Import-Csv -Path "C:\Program Files (x86)\TechServices\Scripts\SMAC\DICEList.csv" #DiceList of possible password phrases, there are plenty of good ones available.
+$Dice = Import-Csv -Path "C:\Program Files (x86)\TechServices\Scripts\SMAC\DICEList.csv" #DiceList of possible password phrases, there are plenty of secure ones available.
 If ($Iterations -eq 0)
 {
     $RandomIteration = Get-Random -Maximum 8 -Minimum 2
@@ -86,6 +86,7 @@ Function Identify-AdminAccount
 }
 
 Function Get-PasswordVersionToWrite
+#as a failsafe, we keep the last password that was written in the table. This function identifies the password field to write to for this run.  
 {
 $filename = Get-ChildItem 'C:\Program Files (x86)\TechServices\Scripts\SMAC\*.run'
 
