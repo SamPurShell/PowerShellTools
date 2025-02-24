@@ -109,7 +109,7 @@ If ($FTPMode -eq $False)
 {
 Copy-Item -Path $(($RemotePath) + "/*")  -Destination $LocalPath
 }
-#Set up Variables 
+#Set up Variables, SHOULD UPDATE THIS WITH A SWITCH
 $LocalFiles = get-childitem  -Path $LocalPath -Include *.* -Recurse 
 If (($FTPMode -eq $True) -and ($AdditionalRemotePath -ne ''))
 {
